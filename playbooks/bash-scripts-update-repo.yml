@@ -1,0 +1,11 @@
+---
+- name: Update hub bash scripts repo
+  hosts: own:support
+
+  tasks:
+    - name: Update local repo
+      git:
+        repo: https://{{ gh_user }}:{{ inventory_hostname + '_ssh_key_pwd' }}@github.com/anthonyfuentes/hz_bash_scripts.git
+        dest: ~/.bin
+        update: yes
+        version: master
