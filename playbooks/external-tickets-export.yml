@@ -1,0 +1,22 @@
+---
+- name: Export external ticket data
+  hosts: help.hubzero.org
+  vars:
+    export_path: /var/lib/mysql_sec/tickets.csv
+    download_name: tickets.csv
+
+  tasks:
+
+    - name: Export external ticket data
+      command: mysql --defaults-extra-file=/etc/mysql/hubmaint.cnf -e "select 'hub', 'id', 'status', 'severity', 'category', 'submitter_name', 'submitter_email', 'assignee' union all select hub_name, external_id, status, severity, category, submitter_name, submitter_email, assignee_name into outfile '{{ export_path }}' fields terminated by ',' lines terminated by '\n' from jos_externaltickets_tickets;" hubzero
+
+    - name: Copy to local machine
+      fetch:
+        src: '{{ export_path }}'
+        dest: '{{ local_download_path }}/{{ download_name }}'
+        flat: yes
+
+    - name: Remove file from host
+      file:
+        path: '{{ export_path }}'
+        state: absent

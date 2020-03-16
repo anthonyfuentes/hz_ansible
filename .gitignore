@@ -1,3 +1,2 @@
 
-group_vars/own.yml
-group_vars/support.yml
+group_vars/*-vault.yml
