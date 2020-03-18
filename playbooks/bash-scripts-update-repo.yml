@@ -1,6 +1,6 @@
 ---
 - name: Update hub bash scripts repo
-  hosts: own:support
+  hosts: dev:own:support
 
   tasks:
     - name: Update local repo

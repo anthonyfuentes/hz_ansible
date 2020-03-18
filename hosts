@@ -24,3 +24,6 @@ web01.int.vhub.org
 [support-purdue]
 datacenterhub.org
 ncihub.org
+
+[dev]
+dev.purr.purdue.edu
