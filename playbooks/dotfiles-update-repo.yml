@@ -13,3 +13,11 @@
         bare: yes
         update: yes
         version: "{{ dotfiles_branch }}"
+
+    - name: Assume README won't change
+      command: git --git-dir=$HOME/.cfg/ --work-tree=$HOME update-index --assume-unchanged ~/README.md
+
+    - name: Remove README
+      file:
+        path: README.md
+        state: absent

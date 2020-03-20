@@ -41,4 +41,6 @@
       command: git --git-dir=$HOME/.cfg/ --work-tree=$HOME update-index --assume-unchanged ~/README.md
 
     - name: Remove README
-      command: rm ~/README.md
+      file:
+        path: README.md
+        state: absent
