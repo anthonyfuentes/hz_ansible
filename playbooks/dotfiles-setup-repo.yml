@@ -1,0 +1,44 @@
+---
+- name: Setup dotfiles repo
+  hosts: dev:support:own
+  vars:
+    dotfile_backup_dir: dotfiles
+    repo_dir: ~/.cfg
+
+  tasks:
+
+    - name: Init local bare repo
+      command: git init --bare $HOME/.cfg
+
+    - name: Ignore unracked files
+      command: git --git-dir=$HOME/.cfg/ --work-tree=$HOME config status.showUntrackedFiles no
+
+    - name: Set remote
+      command: git --git-dir=$HOME/.cfg/ --work-tree=$HOME remote add origin git@github.com:{{ gh_user }}/dotfiles.git
+
+    - name: Pull from origin
+      git:
+        repo: https://{{ gh_user }}:{{ inventory_hostname + '_ssh_key_pwd' }}@github.com/{{ gh_user }}/dotfiles.git
+        dest: "{{ repo_dir }}"
+        bare: yes
+        update: yes
+        version: "{{ dotfiles_branch }}"
+
+    - name: Create dir for existing dotfiles
+      file:
+        path: "{{ dotfile_backup_dir }}"
+        state: directory
+
+    - name: Move any existing existing dotfiles
+      shell: mv .bashrc .bash_* .gitconfig .vimrc .vim_* README.md {{ dotfile_backup_dir }}
+      register: mv_result
+      failed_when: "mv_result.rc >= 2"
+
+    - name: Checkout appropriate branch
+      command: git --git-dir=$HOME/.cfg/ --work-tree=$HOME checkout {{ dotfiles_branch }}
+
+    - name: Assume README won't change
+      command: git --git-dir=$HOME/.cfg/ --work-tree=$HOME update-index --assume-unchanged ~/README.md
+
+    - name: Remove README
+      command: rm ~/README.md
