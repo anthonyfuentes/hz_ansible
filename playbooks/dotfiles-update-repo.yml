@@ -1,0 +1,15 @@
+---
+- name: Update dotfiles repo
+  hosts: dev:support:own
+  vars:
+    repo_dir: ~/.cfg
+
+  tasks:
+
+    - name: Update local repo
+      git:
+        repo: https://{{ gh_user }}:{{ inventory_hostname + '_ssh_key_pwd' }}@github.com/{{ gh_user }}/dotfiles.git
+        dest: "{{ repo_dir }}"
+        bare: yes
+        update: yes
+        version: "{{ dotfiles_branch }}"
