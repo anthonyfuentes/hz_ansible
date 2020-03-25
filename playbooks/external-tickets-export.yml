@@ -8,7 +8,7 @@
   tasks:
 
     - name: Export external ticket data
-      command: mysql --defaults-extra-file=/etc/mysql/hubmaint.cnf -e "select 'hub', 'id', 'status', 'severity', 'category', 'submitter_name', 'submitter_email', 'assignee' union all select hub_name, external_id, status, severity, category, submitter_name, submitter_email, assignee_name into outfile '{{ export_path }}' fields terminated by ',' lines terminated by '\n' from jos_externaltickets_tickets;" hubzero
+      command: mysql --defaults-extra-file=/etc/mysql/hubmaint.cnf -e "select 'hub', 'id', 'status', 'severity', 'category', 'submitter_name', 'submitter_email', 'assignee', 'created_on', 'last_updated', 'closed_on' union all select hub_name, external_id, status, severity, category, submitter_name, submitter_email, assignee_name, external_created, last_updated, closed_on into outfile '{{ export_path }}' fields terminated by ',' lines terminated by '\n' from jos_externaltickets_tickets;" hubzero
 
     - name: Copy to local machine
       fetch:
