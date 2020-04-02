@@ -1,0 +1,13 @@
+---
+- name: Copy local file to given hosts
+  hosts: dev:own:support
+  vars:
+    local_path:
+    destination_path:
+
+  tasks:
+
+    - name: Copy local file to host
+      copy:
+        src: '{{ local_path }}'
+        dest: '{{ destination_path }}'
